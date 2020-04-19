@@ -49,6 +49,8 @@ module.exports = {
         'prefer-const': 1,
         'no-param-reassign': 'off',
         'no-plusplus': 'off',
+        'react/prop-types': 0,
+        'no-trailing-spaces': ['error', { skipBlankLines: true }],
     },
     settings: {
         'import/resolver': {
