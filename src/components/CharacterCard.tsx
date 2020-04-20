@@ -5,6 +5,10 @@ import closeIcon from '../assets/closeIcon.svg';
 const Styled = {
     Card: styled.div`
         position: relative;
+        background: #DADADA;
+        &:active {
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
     `,
     Image: styled.img`
         object-fit: cover;
@@ -37,15 +41,28 @@ const Styled = {
         width: 10px;
         height: 10px;
     `,
+    Name: styled.div`
+        position: absolute;
+        top: 165px;
+        width: 100%;
+        font-family: Roboto;
+        font-style: normal;
+        font-weight: 300;
+        font-size: 24px;
+        line-height: 28px;
+        text-align: center;
+        color: #FFFFFF;
+    `,
 };
 
-const CharacterCard: React.FC<IProps> = ({ image, className, children }) => {
+const CharacterCard: React.FC<IProps> = ({ image, name, className, children }) => {
     return (
         <Styled.Card className={className}>
             <Styled.Image src={image} />
             <Styled.CloseButton>
                 <Styled.CloseIcon src={closeIcon} />
             </Styled.CloseButton>
+            <Styled.Name>{name}</Styled.Name>
             {children}
         </Styled.Card>
     );
@@ -54,5 +71,6 @@ const CharacterCard: React.FC<IProps> = ({ image, className, children }) => {
 export default CharacterCard;
 export interface IProps {
     image: string
+    name?: string
     className?: string
 }
