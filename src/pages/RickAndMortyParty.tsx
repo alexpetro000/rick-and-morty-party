@@ -8,6 +8,8 @@ import CharacterSearch from '../components/CharacterSearch';
 import CharacterList from '../components/CharacterList';
 import CharacterParty from '../components/CharacterParty';
 
+import { TCharacter, TParty } from '../types';
+
 const CHARACTERS = gql`
     query Characters($page: Int, $name: String) {
         characters(page: $page, filter: {name: $name}) {
@@ -32,17 +34,15 @@ const Styled = {
         margin: 141px auto 0 auto;
     `,
     CharacterSearch: styled(CharacterSearch)`
-        /* */
-    `,
-    CharacterList: styled(CharacterList)`
-        margin-top: 30px;
+        margin-bottom: 30px;
     `,
     CharacterParty: styled(CharacterParty)`
-        /* */
+        margin: 98px auto 142px auto;
     `,
 };
 
 const RickAndMortyParty: React.FC = () => {
+    const [party, setParty] = useState<TParty>({});
     const [searchQuery, setSearchQuery] = useState<string>('');
     const throttledSearchQuery = useThrottle(searchQuery.length > 2 ? searchQuery : '', 300);
 
@@ -51,14 +51,26 @@ const RickAndMortyParty: React.FC = () => {
         skip: throttledSearchQuery.length <= 2,
     });
 
+    const onCharacterClick = (character: TCharacter) => {
+        if (character.name.toLowerCase().indexOf('rick') >= 0) {
+            setParty((prev) => ({ ...prev, rick: character }));
+        }
+        if (character.name.toLowerCase().indexOf('morty') >= 0) {
+            setParty((prev) => ({ ...prev, morty: character }));
+        }
+    };
+
     return (
         <Styled.Container>
             <Styled.CharacterSearch
                 value={searchQuery}
                 onChange={setSearchQuery}
             />
-            <Styled.CharacterList characters={(error || !data) ? [] : data.characters.results} />
-            <Styled.CharacterParty />
+            <CharacterList
+                characters={(error || !data) ? [] : data.characters.results}
+                onCharacterClick={onCharacterClick}
+            />
+            <Styled.CharacterParty party={party} />
         </Styled.Container>
     );
 };

@@ -25,12 +25,10 @@ const Button = styled.button`
     }
 `;
 
-const CardCloseButton: React.FC = (props) => {
-    return (
-        <Button {...props}>
-            <img width="10px" src={closeIcon} alt="" />
-        </Button>
-    );
-};
+const CardCloseButton: React.FC = (props) => (
+    <Button {...props}>
+        <img width="10px" src={closeIcon} alt="" />
+    </Button>
+);
 
 export default CardCloseButton;

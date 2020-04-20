@@ -15,19 +15,19 @@ const SearchInput = styled.input`
     line-height: 35px;  
 `;
 
-interface CharacterSearchProps {
-    value?: string,
-    onChange?(q: string): void;
-}
-
-const CharacterSearch: React.FC<CharacterSearchProps> = ({ value, onChange }) => {
+const CharacterSearch: React.FC<IProps> = ({ value, onChange, className }) => {
     const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (onChange) onChange(event.target.value.toUpperCase());
     };
 
     return (
-        <SearchInput value={value} onChange={onInputChange} />
+        <SearchInput className={className} value={value} onChange={onInputChange} />
     );
 };
 
 export default CharacterSearch;
+export interface IProps {
+    value?: string
+    onChange?(q: string): void
+    className?: string
+}

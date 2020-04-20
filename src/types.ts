@@ -14,3 +14,8 @@ export type TCharactersQueryResult = {
         results: TCharacter[],
     }
 }
+
+export type TParty = {
+    rick?: TCharacter,
+    morty?: TCharacter,
+}
