@@ -51,6 +51,7 @@ module.exports = {
         'no-plusplus': 'off',
         'react/prop-types': 0,
         'no-trailing-spaces': ['error', { skipBlankLines: true }],
+        'react/jsx-props-no-spreading': 0,
     },
     settings: {
         'import/resolver': {

@@ -2,8 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import CharacterCard from './CharacterCard';
 import CardGroup from './CardGroup';
+import CardCloseButton from './CardCloseButton';
 import { TCharacter } from '../types';
-import closeIcon from '../assets/closeIcon.svg';
 
 const Styled = {
     CharacterCard: styled(CharacterCard)`
@@ -15,7 +15,9 @@ const CharacterList: React.FC<IProps> = ({ characters, className }) => {
     return (
         <CardGroup className={className} cols={4} gap={30}>
             {characters.map((character) => (
-                <Styled.CharacterCard key={character.id} image={character.image} />
+                <Styled.CharacterCard key={character.id} image={character.image}>
+                    <CardCloseButton />
+                </Styled.CharacterCard>
             ))}
         </CardGroup>
     );
