@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 const SearchInput = styled.input`
     width: 100%;
+    box-sizing: border-box;
     height: 80px;
     padding-left: 27px;
     border: 1px solid #A0A0A0;

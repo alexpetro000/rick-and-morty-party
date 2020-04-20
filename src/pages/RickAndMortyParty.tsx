@@ -25,77 +25,41 @@ const CHARACTERS = gql`
     }
 `;
 
-const Container = styled.div`
-    width: 810px;
-    margin: 141px auto 0 auto;
-`;
-
-type CharactersQueryResult = {
-    characters: {
-        info: {
-            count: number,
-            pages: number,
-            next: number
-        },
-        results: Array<{
-            id: string,
-            image: string,
-            name: string,
-        }>,
-    }
-}
+const Styled = {
+    Container: styled.div`
+        width: 90%;
+        max-width: 810px;
+        margin: 141px auto 0 auto;
+    `,
+    CharacterSearch: styled(CharacterSearch)`
+        /* */
+    `,
+    CharacterList: styled(CharacterList)`
+        margin-top: 30px;
+    `,
+    CharacterParty: styled(CharacterParty)`
+        /* */
+    `,
+};
 
 const RickAndMortyParty: React.FC = () => {
     const [searchQuery, setSearchQuery] = useState<string>('');
     const throttledSearchQuery = useThrottle(searchQuery.length > 2 ? searchQuery : '', 300);
 
-    const {
-        error, data, loading, fetchMore,
-    } = useQuery(CHARACTERS, {
+    const { error, data } = useQuery(CHARACTERS, {
         variables: { name: throttledSearchQuery, page: 1 },
         skip: throttledSearchQuery.length <= 2,
-        onCompleted: (d) => {
-            function loadMode(page: number) {
-                if (!page) return;
-                fetchMore({
-                    variables: {
-                        name: throttledSearchQuery,
-                        page,
-                    },
-                    updateQuery: (prev, { fetchMoreResult }) => {
-                        if (!fetchMoreResult) return prev;
-                        return {
-                            ...prev,
-                            characters: {
-                                ...prev.characters,
-                                info: fetchMoreResult.characters.info,
-                                results: [
-                                    ...prev.characters.results,
-                                    ...fetchMoreResult.characters.results,
-                                ],
-                            },
-                        };
-                    },
-                }).then((res) => {
-                    if (!res.data) return;
-                    loadMode(res.data.characters.info.next);
-                });
-            }
-            if (d) loadMode(d.characters.info.next);
-        },
     });
 
     return (
-        <Container>
-            <CharacterSearch
+        <Styled.Container>
+            <Styled.CharacterSearch
                 value={searchQuery}
                 onChange={setSearchQuery}
             />
-            {loading && 'Loading...'}
-
-            <CharacterList characters={error || !data ? [] : data.characters.results} />
-            <CharacterParty />
-        </Container>
+            <Styled.CharacterList characters={(error || !data) ? [] : data.characters.results} />
+            <Styled.CharacterParty />
+        </Styled.Container>
     );
 };
 
