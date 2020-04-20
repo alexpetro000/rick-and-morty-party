@@ -10,7 +10,10 @@ const Container = styled.div((props: IProps) => `
         margin-right: ${props.gap};
         margin-top: ${props.gap};
         
-         &:nth-child(${props.cols}n) {
+        &:nth-child(${props.cols}n) {
+            margin-right: 0;
+        }
+        &:last-child {
             margin-right: 0;
         }
         &:nth-child(-n+4) {
