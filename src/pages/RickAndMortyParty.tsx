@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import styled from 'styled-components';
 import { useQuery } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
-import useThrottle from '../hooks/useThrottle.';
+import { throttle } from 'lodash';
 
 import CharacterSearch from '../components/CharacterSearch';
 import CharacterList from '../components/CharacterList';
@@ -58,17 +58,15 @@ const RickAndMortyParty: React.FC = () => {
     const [party, setParty] = useState<TParty>(partyInitialState);
     const [removedIds, setRemovedIds] = useState<Array<string|number>>([]);
     const [searchQuery, setSearchQuery] = useState<string>('');
-    const throttledSearchQuery = useThrottle(
-        searchQuery.length > 2 ? searchQuery : '',
-        300,
-    );
+
+    const throttledSetSearchQuery = useCallback(throttle(setSearchQuery, 300), [setSearchQuery]);
 
     const { error: queryError, data: queryData } = useQuery<TCharactersQueryData>(CHARACTERS, {
-        variables: { name: throttledSearchQuery },
-        skip: throttledSearchQuery.length <= 2,
+        variables: { name: searchQuery },
+        skip: searchQuery.length <= 2,
     });
 
-    const onCharacterClick = (character: TCharacter): void => {
+    const onCharacterClick = useCallback((character: TCharacter): void => {
         let isUpdated = false;
         const newParty = party.map((member: TPartyMember): TPartyMember => {
             if (character.name.toLowerCase().indexOf(member.tag.toLowerCase()) >= 0) {
@@ -78,22 +76,22 @@ const RickAndMortyParty: React.FC = () => {
             return member;
         });
         if (isUpdated) setParty(newParty);
-    };
+    }, [party]);
 
-    const onCharacterRemove = (character: TCharacter): void => {
+    const onCharacterRemove = useCallback((character: TCharacter): void => {
         setRemovedIds([...removedIds, character.id]);
-    };
+    }, [removedIds, setRemovedIds]);
 
-    const filteredCharacters = (queryError || !queryData)
+    const filteredCharacters = useMemo(() => ((queryError || !queryData)
         ? []
         : queryData.characters.results
-            .filter((character: TCharacter) => removedIds.indexOf(character.id) < 0);
+            .filter((character: TCharacter) => removedIds.indexOf(character.id) < 0)
+    ), [queryData, queryError, removedIds]);
 
     return (
         <Styled.Container>
             <Styled.CharacterSearch
-                value={searchQuery}
-                onChange={setSearchQuery}
+                onChange={throttledSetSearchQuery}
             />
             <CharacterList
                 characters={filteredCharacters}

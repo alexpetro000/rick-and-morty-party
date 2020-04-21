@@ -4,7 +4,7 @@ import CardGroup from './CardGroup';
 import CardCloseButton from './CardCloseButton';
 import { TCharacter } from '../types';
 
-const CharacterList: React.FC<IProps> = ({
+const CharacterList: React.FC<IProps> = React.memo(({
     characters, className, onCharacterClick, onCharacterRemove,
 }) => (
     <CardGroup className={className} cols={4} gap={30}>
@@ -25,7 +25,7 @@ const CharacterList: React.FC<IProps> = ({
             </Card>
         ))}
     </CardGroup>
-);
+));
 
 export default CharacterList;
 export interface IProps {

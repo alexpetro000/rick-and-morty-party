@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 const SearchInput = styled.input`
@@ -15,19 +15,22 @@ const SearchInput = styled.input`
     line-height: 35px;  
 `;
 
-const CharacterSearch: React.FC<IProps> = ({ value, onChange, className }) => {
+const CharacterSearch: React.FC<IProps> = React.memo(({ onChange, className }) => {
+    const [localVal, setLocalVal] = useState<string>('');
+
     const onInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-        if (onChange) onChange(event.target.value.toUpperCase());
+        const newVal = event.target.value.toUpperCase();
+        setLocalVal(newVal);
+        if (onChange) onChange(newVal);
     };
 
     return (
-        <SearchInput className={className} value={value} onChange={onInputChange} />
+        <SearchInput className={className} value={localVal} onChange={onInputChange} />
     );
-};
+});
 
 export default CharacterSearch;
 export interface IProps {
-    value?: string;
     onChange?(q: string): void;
     className?: string;
 }
