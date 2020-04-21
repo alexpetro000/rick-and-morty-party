@@ -16,7 +16,7 @@ const SearchInput = styled.input`
 `;
 
 const CharacterSearch: React.FC<IProps> = ({ value, onChange, className }) => {
-    const onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const onInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
         if (onChange) onChange(event.target.value.toUpperCase());
     };
 
@@ -27,7 +27,7 @@ const CharacterSearch: React.FC<IProps> = ({ value, onChange, className }) => {
 
 export default CharacterSearch;
 export interface IProps {
-    value?: string
-    onChange?(q: string): void
-    className?: string
+    value?: string;
+    onChange?(q: string): void;
+    className?: string;
 }

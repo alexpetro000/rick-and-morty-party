@@ -25,7 +25,7 @@ const Button = styled.button`
     }
 `;
 
-const CardCloseButton: React.FC = (props) => (
+const CardCloseButton: React.FC<React.ButtonHTMLAttributes<HTMLButtonElement>> = (props) => (
     <Button {...props}>
         <img width="10px" src={closeIcon} alt="" />
     </Button>

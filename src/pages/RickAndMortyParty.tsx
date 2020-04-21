@@ -8,7 +8,9 @@ import CharacterSearch from '../components/CharacterSearch';
 import CharacterList from '../components/CharacterList';
 import CharacterParty from '../components/CharacterParty';
 
-import { TCharacter, TParty } from '../types';
+import {
+    TCharactersQueryData, TCharacter, TParty, TPartyMember,
+} from '../types';
 
 const CHARACTERS = gql`
     query Characters($page: Int, $name: String) {
@@ -41,24 +43,41 @@ const Styled = {
     `,
 };
 
+const partyInitialState = [
+    {
+        name: 'RICK',
+        tag: 'rick',
+    },
+    {
+        name: 'MORTY',
+        tag: 'morty',
+    },
+];
+
 const RickAndMortyParty: React.FC = () => {
-    const [party, setParty] = useState<TParty>({});
+    const [party, setParty] = useState<TParty>(partyInitialState);
     const [removedIds, setRemovedIds] = useState<Array<string|number>>([]);
     const [searchQuery, setSearchQuery] = useState<string>('');
-    const throttledSearchQuery = useThrottle(searchQuery.length > 2 ? searchQuery : '', 300);
+    const throttledSearchQuery = useThrottle(
+        searchQuery.length > 2 ? searchQuery : '',
+        300,
+    );
 
-    const { error, data } = useQuery(CHARACTERS, {
-        variables: { name: throttledSearchQuery, page: 1 },
+    const { error: queryError, data: queryData } = useQuery<TCharactersQueryData>(CHARACTERS, {
+        variables: { name: throttledSearchQuery },
         skip: throttledSearchQuery.length <= 2,
     });
 
-    const onCharacterClick = (character: TCharacter) => {
-        if (character.name.toLowerCase().indexOf('rick') >= 0) {
-            setParty((prev) => ({ ...prev, rick: character }));
-        }
-        if (character.name.toLowerCase().indexOf('morty') >= 0) {
-            setParty((prev) => ({ ...prev, morty: character }));
-        }
+    const onCharacterClick = (character: TCharacter): void => {
+        let isUpdated = false;
+        const newParty = party.map((member: TPartyMember): TPartyMember => {
+            if (character.name.toLowerCase().indexOf(member.tag.toLowerCase()) >= 0) {
+                isUpdated = true;
+                return { ...member, character };
+            }
+            return member;
+        });
+        if (isUpdated) setParty(newParty);
     };
 
     const onCharacterRemove = (character: TCharacter): void => {

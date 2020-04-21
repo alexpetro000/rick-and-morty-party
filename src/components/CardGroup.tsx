@@ -36,7 +36,7 @@ const CharacterList: React.FC<IProps> = ({
 
 export default CharacterList;
 export interface IProps {
-    className?: string,
-    gap?: number | string
-    cols: number
+    className?: string;
+    gap?: number | string;
+    cols: number;
 }

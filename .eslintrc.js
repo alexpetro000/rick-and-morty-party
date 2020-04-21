@@ -5,6 +5,7 @@ module.exports = {
     },
     extends: [
         'plugin:react/recommended',
+        'plugin:@typescript-eslint/recommended',
         'airbnb',
     ],
     globals: {
@@ -52,6 +53,8 @@ module.exports = {
         'react/prop-types': 0,
         'no-trailing-spaces': ['error', { skipBlankLines: true }],
         'react/jsx-props-no-spreading': 0,
+
+        '@typescript-eslint/interface-name-prefix': [1, 'always']
     },
     settings: {
         'import/resolver': {

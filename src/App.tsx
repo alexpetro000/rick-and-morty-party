@@ -8,12 +8,10 @@ const client = new ApolloClient({
     uri: 'https://rickandmortyapi.com/graphql',
 });
 
-const App: React.FC = () => {
-    return (
-        <ApolloProvider client={client}>
-            <RickAndMortyParty />
-        </ApolloProvider>
-    );
-};
+const App: React.FC = () => (
+    <ApolloProvider client={client}>
+        <RickAndMortyParty />
+    </ApolloProvider>
+);
 
 export default App;

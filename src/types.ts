@@ -4,18 +4,21 @@ export type TCharacter = {
     image: string;
 }
 
-export type TCharactersQueryResult = {
+export type TCharactersQueryData = {
     characters: {
         info: {
-            count: number,
-            pages: number,
-            next: number
-        },
-        results: TCharacter[],
-    }
+            count: number;
+            pages: number;
+            next: number;
+        };
+        results: TCharacter[];
+    };
 }
 
-export type TParty = {
-    rick?: TCharacter,
-    morty?: TCharacter,
+export type TPartyMember = {
+    name: string;
+    tag: string;
+    character?: TCharacter;
 }
+
+export type TParty = TPartyMember[]
