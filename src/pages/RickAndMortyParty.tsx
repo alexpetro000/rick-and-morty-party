@@ -43,6 +43,7 @@ const Styled = {
 
 const RickAndMortyParty: React.FC = () => {
     const [party, setParty] = useState<TParty>({});
+    const [removedIds, setRemovedIds] = useState<Array<string|number>>([]);
     const [searchQuery, setSearchQuery] = useState<string>('');
     const throttledSearchQuery = useThrottle(searchQuery.length > 2 ? searchQuery : '', 300);
 
@@ -60,6 +61,15 @@ const RickAndMortyParty: React.FC = () => {
         }
     };
 
+    const onCharacterRemove = (character: TCharacter): void => {
+        setRemovedIds([...removedIds, character.id]);
+    };
+
+    const filteredCharacters = (queryError || !queryData)
+        ? []
+        : queryData.characters.results
+            .filter((character: TCharacter) => removedIds.indexOf(character.id) < 0);
+
     return (
         <Styled.Container>
             <Styled.CharacterSearch
@@ -67,8 +77,9 @@ const RickAndMortyParty: React.FC = () => {
                 onChange={setSearchQuery}
             />
             <CharacterList
-                characters={(error || !data) ? [] : data.characters.results}
+                characters={filteredCharacters}
                 onCharacterClick={onCharacterClick}
+                onCharacterRemove={onCharacterRemove}
             />
             <Styled.CharacterParty party={party} />
         </Styled.Container>

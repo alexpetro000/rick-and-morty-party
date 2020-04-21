@@ -13,7 +13,13 @@ const CharacterList: React.FC<IProps> = ({ characters, className, onCharacterCli
                 image={character.image}
                 onClick={onCharacterClick && onCharacterClick.bind(null, character)}
             >
-                <CardCloseButton />
+                <CardCloseButton
+                    onClick={(e: React.MouseEvent): void => {
+                        e.stopPropagation();
+                        if (onCharacterRemove) onCharacterRemove(character);
+                    }}
+                    onMouseDown={(e: React.MouseEvent): void => e.stopPropagation()}
+                />
             </Card>
         ))}
     </CardGroup>
