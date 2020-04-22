@@ -44,14 +44,8 @@ const Styled = {
 };
 
 const partyInitialState = [
-    {
-        name: 'RICK',
-        tag: 'rick',
-    },
-    {
-        name: 'MORTY',
-        tag: 'morty',
-    },
+    { name: 'RICK', tag: 'rick' },
+    { name: 'MORTY', tag: 'morty' },
 ];
 
 const RickAndMortyParty: React.FC = () => {
@@ -61,9 +55,12 @@ const RickAndMortyParty: React.FC = () => {
 
     const throttledSetSearchQuery = useCallback(throttle(setSearchQuery, 300), [setSearchQuery]);
 
-    const { error: queryError, data: queryData } = useQuery<TCharactersQueryData>(CHARACTERS, {
+    const {
+        error: queryError, data: queryData,
+    } = useQuery<TCharactersQueryData>(CHARACTERS, {
         variables: { name: searchQuery },
         skip: searchQuery.length <= 2,
+        errorPolicy: 'all',
     });
 
     const onCharacterClick = useCallback((character: TCharacter): void => {
@@ -82,7 +79,7 @@ const RickAndMortyParty: React.FC = () => {
         setRemovedIds([...removedIds, character.id]);
     }, [removedIds, setRemovedIds]);
 
-    const filteredCharacters = useMemo(() => ((queryError || !queryData)
+    const filteredCharacters = useMemo(() => ((queryError || !queryData || !queryData.characters)
         ? []
         : queryData.characters.results
             .filter((character: TCharacter) => removedIds.indexOf(character.id) < 0)

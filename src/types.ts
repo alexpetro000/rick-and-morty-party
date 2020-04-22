@@ -12,7 +12,7 @@ export type TCharactersQueryData = {
             next: number;
         };
         results: TCharacter[];
-    };
+    } | null;
 }
 
 export type TPartyMember = {
