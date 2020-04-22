@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import styled from 'styled-components';
 import { useQuery } from '@apollo/react-hooks';
-import { gql } from 'apollo-boost';
 import { throttle } from 'lodash';
 
 import CharacterSearch from '../components/CharacterSearch';
@@ -12,22 +11,7 @@ import {
     TCharactersQueryData, TCharacter, TParty, TPartyMember,
 } from '../types';
 
-const CHARACTERS = gql`
-    query Characters($page: Int, $name: String) {
-        characters(page: $page, filter: {name: $name}) {
-            info {
-                count
-                pages
-                next
-            }
-            results {
-                id
-                name
-                image
-            }
-        }
-    }
-`;
+import CHARACTERS from '../gql/characters';
 
 const Styled = {
     Container: styled.div`
